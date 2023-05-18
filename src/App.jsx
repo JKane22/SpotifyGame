@@ -3,6 +3,9 @@ import "./css/App.css";
 
 import { UilGithub, UilTwitter } from "@iconscout/react-unicons";
 
+// Components
+import GameOver from "./components/GameOver";
+
 function handleClickTwitter() {
   window.location.href = "https://twitter.com/JereKane22";
 }
@@ -90,9 +93,12 @@ function App() {
   const [song1, setSong1] = useState(null);
   const [song2, setSong2] = useState(null);
 
-  // Effects
+  // Wrong Answer
   const [shakeEffect, setShakeEffect] = useState(false);
   const [song_picked, setSongPicked] = useState(null);
+  const [gameOver, setGameOver] = useState(false);
+  const [finalScore, setFinalScore] = useState(0);
+
 
   function CheckAnswer(song_picked, song1, song2) {
     var pervious_songs = [song1, song2];
@@ -104,6 +110,8 @@ function App() {
       } else {
         setSongPicked(1);
         setShakeEffect(true);
+        setFinalScore(count);
+        setGameOver(true);
 
         // Reset the shake effect after a short delay
         setTimeout(() => {
@@ -121,6 +129,8 @@ function App() {
       } else {
         setSongPicked(2);
         setShakeEffect(true);
+        setGameOver(true);
+        setFinalScore(count);
 
         // Reset the shake effect after a short delay
         setTimeout(() => {
@@ -157,6 +167,12 @@ function App() {
     setThumbnail2(song_data[Random_Song2].ImageURL);
   };
 
+  const handleReset = () => {
+    setGameOver(false);
+
+    RefreshSongs([]);
+  };
+
   useEffect(() => {
     let Random_Song1 = Math.floor(Math.random() * song_data.length);
     let Random_Song2 = Math.floor(Math.random() * song_data.length);
@@ -175,6 +191,7 @@ function App() {
 
   return (
     <div className="App bg-stone-800 h-screen">
+      {gameOver && <GameOver isOpen={gameOver} onReset={handleReset} score={finalScore} />}
       <div className="text-center flex justify-center">
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/168px-Spotify_logo_without_text.svg.png?20160123212544"
