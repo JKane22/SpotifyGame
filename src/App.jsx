@@ -90,6 +90,10 @@ function App() {
   const [song1, setSong1] = useState(null);
   const [song2, setSong2] = useState(null);
 
+  // Effects
+  const [shakeEffect, setShakeEffect] = useState(false);
+  const [song_picked, setSongPicked] = useState(null);
+
   function CheckAnswer(song_picked, song1, song2) {
     var pervious_songs = [song1, song2];
     if (song_picked === null) return;
@@ -98,9 +102,14 @@ function App() {
       if (song1.Plays > song2.Plays) {
         setCount(count + 1);
       } else {
-        const element = document.getElementById("song1");
-        element.classList.add('shake');
-        element.classList.remove('shake');
+        setSongPicked(1);
+        setShakeEffect(true);
+
+        // Reset the shake effect after a short delay
+        setTimeout(() => {
+          setShakeEffect(false);
+          setSongPicked(null);
+        }, 500);
 
         if (count > 0) {
           setCount(0);
@@ -110,8 +119,14 @@ function App() {
       if (song2.Plays > song1.Plays) {
         setCount(count + 1);
       } else {
-        const element = document.getElementById("song2");
-        element.classList.add('shake');
+        setSongPicked(2);
+        setShakeEffect(true);
+
+        // Reset the shake effect after a short delay
+        setTimeout(() => {
+          setShakeEffect(false);
+          setSongPicked(null);
+        }, 500);
 
         if (count > 0) {
           setCount(0);
@@ -120,7 +135,7 @@ function App() {
     }
 
     RefreshSongs(pervious_songs);
-  }
+  };
 
   async function RefreshSongs(pervious_songs) {
     let Random_Song1 = Math.floor(Math.random() * song_data.length);
@@ -133,14 +148,14 @@ function App() {
 
     while (pervious_songs.includes(song_data[Random_Song1])) {
       Random_Song1 = Math.floor(Math.random() * song_data.length);
-    };
+    }
 
     setSong1(song_data[Random_Song1]);
     setSong2(song_data[Random_Song2]);
 
     setThumbnail1(song_data[Random_Song1].ImageURL);
     setThumbnail2(song_data[Random_Song2].ImageURL);
-  }
+  };
 
   useEffect(() => {
     let Random_Song1 = Math.floor(Math.random() * song_data.length);
@@ -180,14 +195,22 @@ function App() {
         other!
       </h1>
       <div className="flex justify-center pt-20">
-        <div onClick={() => CheckAnswer(1, song1, song2)} id="song1">
+        <div
+          onClick={() => CheckAnswer(1, song1, song2)}
+          id="song1"
+          className={shakeEffect && song_picked === 1 ? "shake-animation" : ""}
+        >
           <img
             src={thumbnail1}
             alt="Song Thumbnail 1"
             className="rounded-xl mr-10 w-72 hover:scale-125 duration-300 hover:border-2 border-white"
           />
         </div>
-        <div onClick={() => CheckAnswer(2, song1, song2)} id="song2">
+        <div
+          onClick={() => CheckAnswer(2, song1, song2)}
+          id="song2"
+          className={shakeEffect && song_picked === 2 ? "shake-animation" : ""}
+        >
           <img
             src={thumbnail2}
             alt="Song Thumbnail 2"
