@@ -9,7 +9,7 @@ On top of the Array value checks I learned about how to use hover transitions an
 - On Hover over Img play the song within the Browser.
 
 ## Deployment
-[Click here to play with App](https://spotify-game-acoi.vercel.app/)
+[Click here to play with App](https://spotify-game-nu.vercel.app/)
 
 ## Get Started!
 Clone the project into local
